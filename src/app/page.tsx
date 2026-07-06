@@ -328,7 +328,7 @@ export default function Home() {
         {/* Simple Header */}
         <header className="header" style={{ borderBottom: "none" }}>
           <div className="header-title-group">
-            <h1 style={{ background: "linear-gradient(135deg, #fff 0%, var(--color-brand-light) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Altuni AI Labs</h1>
+            <h1 style={{ background: "linear-gradient(135deg, #fff 0%, var(--color-brand-light) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Sanmaaya AI Labs</h1>
             <span className="header-subtitle">AI Investment Research Agent Node</span>
           </div>
           <button className="btn btn-secondary" onClick={() => setView("console")}>
@@ -342,7 +342,7 @@ export default function Home() {
           <span className="landing-badge">V1.0 Autonomous Agentic Workflow</span>
           <h2 className="landing-title">Empower Your Portfolio with Agentic Intelligence</h2>
           <p className="landing-subtitle">
-            Altuni AI Investment Research Agent leverages real-time financial statements, SWOT news sentiment analytics, and LangGraph DAG execution to deliver structured invest/pass decisions with deep reasoning in seconds.
+            Sanmaaya AI Investment Research Agent leverages real-time financial statements, SWOT news sentiment analytics, and LangGraph DAG execution to deliver structured invest/pass decisions with deep reasoning in seconds.
           </p>
           <button className="btn landing-cta-btn" onClick={() => setView("console")}>
             Launch Research Console
@@ -411,7 +411,7 @@ export default function Home() {
 
         {/* Footer */}
         <footer className="landing-footer">
-          <p>© 2026 Altuni AI Labs. All rights reserved. Developed for AI Product Development Assignment.</p>
+          <p>© 2026 Sanmaaya. All rights reserved. Developed for AI Product Development Assignment.</p>
         </footer>
       </div>
     );
@@ -422,7 +422,7 @@ export default function Home() {
       {/* Header */}
       <header className="header">
         <div className="header-title-group" style={{ cursor: "pointer" }} onClick={() => setView("landing")}>
-          <h1>Altuni AI Labs</h1>
+          <h1>Sanmaaya AI Labs</h1>
           <span className="header-subtitle">AI Investment Research Agent Node</span>
         </div>
         <div style={{ display: "flex", gap: "12px" }}>
