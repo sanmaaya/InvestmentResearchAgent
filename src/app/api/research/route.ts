@@ -14,29 +14,19 @@ export async function POST(req: Request) {
     const targetProvider = provider || "gemini";
     let model;
 
+    const key = apiKey || (targetProvider === "gemini" ? process.env.GEMINI_API_KEY : process.env.OPENAI_API_KEY);
+    const keyPlaceholderUsed = !key;
+    const activeKey = key || "DEMO_KEY";
+
     if (targetProvider === "gemini") {
-      const key = apiKey || process.env.GEMINI_API_KEY;
-      if (!key) {
-        return NextResponse.json(
-          { error: "Gemini API key is missing. Please provide it in the UI configuration or set GEMINI_API_KEY in the workspace environment." },
-          { status: 400 }
-        );
-      }
       model = new ChatGoogleGenerativeAI({
-        apiKey: key,
+        apiKey: activeKey,
         model: "gemini-1.5-flash",
         temperature: 0.1,
       });
     } else {
-      const key = apiKey || process.env.OPENAI_API_KEY;
-      if (!key) {
-        return NextResponse.json(
-          { error: "OpenAI API key is missing. Please provide it in the UI configuration or set OPENAI_API_KEY in the workspace environment." },
-          { status: 400 }
-        );
-      }
       model = new ChatOpenAI({
-        apiKey: key,
+        apiKey: activeKey,
         modelName: "gpt-4o-mini",
         temperature: 0.1,
       });
@@ -53,6 +43,9 @@ export async function POST(req: Request) {
 
         try {
           sendUpdate("log", "Initializing Investment Research Agent graph...");
+          if (keyPlaceholderUsed) {
+            sendUpdate("log", "[system WARNING] No API Key detected. Entering DEMO MODE: Real-time Yahoo Finance stats and DuckDuckGo news references will be fetched, and AI analysis nodes will compile using high-fidelity fallback reports.");
+          }
           
           const agent = createAgent(model, { tavilyKey, serpApiKey });
           
