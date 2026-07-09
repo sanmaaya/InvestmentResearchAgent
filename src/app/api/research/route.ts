@@ -94,6 +94,18 @@ export async function POST(req: Request) {
               if (nodeOutput.recommendation) {
                 sendUpdate("recommendation", nodeOutput.recommendation);
               }
+              if (nodeOutput.moat) {
+                sendUpdate("moat", nodeOutput.moat);
+              }
+              if (nodeOutput.competitors) {
+                sendUpdate("competitors", nodeOutput.competitors);
+              }
+              if (nodeOutput.scores) {
+                sendUpdate("scores", nodeOutput.scores);
+              }
+              if (nodeOutput.valuationAnalysis) {
+                sendUpdate("valuationAnalysis", nodeOutput.valuationAnalysis);
+              }
             }
           }
 

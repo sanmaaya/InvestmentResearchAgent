@@ -22,7 +22,7 @@ import {
 import GraphVisualizer from "@/components/GraphVisualizer";
 import FinancialDashboard from "@/components/FinancialDashboard";
 import ReportViewer from "@/components/ReportViewer";
-import { CompanyProfile, FinancialMetrics, ChartPoint, NewsResult, AnalysisSection, RiskSection, Recommendation } from "@/lib/agent/state";
+import { CompanyProfile, FinancialMetrics, ChartPoint, NewsResult, AnalysisSection, RiskSection, Recommendation, MoatMetrics, CompetitorComparison, InvestmentScores, ValuationAnalysis } from "@/lib/agent/state";
 
 interface HistoryItem {
   id: string;
@@ -38,6 +38,10 @@ interface HistoryItem {
   analysis: AnalysisSection;
   risks: RiskSection;
   recommendation: Recommendation;
+  moat?: MoatMetrics;
+  competitors?: CompetitorComparison[];
+  scores?: InvestmentScores;
+  valuationAnalysis?: ValuationAnalysis;
 }
 
 export default function Home() {
@@ -73,6 +77,10 @@ export default function Home() {
   const [analysis, setAnalysis] = useState<AnalysisSection | undefined>(undefined);
   const [risks, setRisks] = useState<RiskSection | undefined>(undefined);
   const [recommendation, setRecommendation] = useState<Recommendation | undefined>(undefined);
+  const [moat, setMoat] = useState<MoatMetrics | undefined>(undefined);
+  const [competitors, setCompetitors] = useState<CompetitorComparison[]>([]);
+  const [scores, setScores] = useState<InvestmentScores | undefined>(undefined);
+  const [valuationAnalysis, setValuationAnalysis] = useState<ValuationAnalysis | undefined>(undefined);
 
   // History states
   const [historyList, setHistoryList] = useState<HistoryItem[]>([]);
@@ -152,6 +160,10 @@ export default function Home() {
     setAnalysis(undefined);
     setRisks(undefined);
     setRecommendation(undefined);
+    setMoat(undefined);
+    setCompetitors([]);
+    setScores(undefined);
+    setValuationAnalysis(undefined);
     setActiveHistoryId(null);
 
     // Keep temporary references of states as they update
@@ -163,6 +175,10 @@ export default function Home() {
     let currentAnalysis: AnalysisSection | undefined;
     let currentRisks: RiskSection | undefined;
     let currentRecommendation: Recommendation | undefined;
+    let currentMoat: MoatMetrics | undefined;
+    let currentCompetitors: CompetitorComparison[] = [];
+    let currentScores: InvestmentScores | undefined;
+    let currentValuationAnalysis: ValuationAnalysis | undefined;
 
     try {
       const response = await fetch("/api/research", {
@@ -247,6 +263,22 @@ export default function Home() {
                 setRecommendation(chunk.data);
                 currentRecommendation = chunk.data;
                 break;
+              case "moat":
+                setMoat(chunk.data);
+                currentMoat = chunk.data;
+                break;
+              case "competitors":
+                setCompetitors(chunk.data);
+                currentCompetitors = chunk.data;
+                break;
+              case "scores":
+                setScores(chunk.data);
+                currentScores = chunk.data;
+                break;
+              case "valuationAnalysis":
+                setValuationAnalysis(chunk.data);
+                currentValuationAnalysis = chunk.data;
+                break;
               case "done":
                 setLogs((prev) => [...prev, `[system] ${chunk.data}`]);
                 setCurrentNode("done");
@@ -273,6 +305,10 @@ export default function Home() {
                     analysis: currentAnalysis || { financialHealth: "", marketPosition: "", growthDrivers: "" },
                     risks: currentRisks || { competitiveThreats: "", macroFactors: "", regulatoryRisks: "" },
                     recommendation: currentRecommendation,
+                    moat: currentMoat,
+                    competitors: currentCompetitors,
+                    scores: currentScores,
+                    valuationAnalysis: currentValuationAnalysis,
                   };
 
                   setHistoryList((prev) => {
@@ -313,6 +349,10 @@ export default function Home() {
     setAnalysis(item.analysis);
     setRisks(item.risks);
     setRecommendation(item.recommendation);
+    setMoat(item.moat);
+    setCompetitors(item.competitors || []);
+    setScores(item.scores);
+    setValuationAnalysis(item.valuationAnalysis);
     setCurrentNode("done");
     setLogs([`[system] Loaded cached research report for ${item.companyName} (${item.ticker}) from date ${item.date}.`]);
     setErrorMsg(null);
@@ -334,6 +374,10 @@ export default function Home() {
         setAnalysis(undefined);
         setRisks(undefined);
         setRecommendation(undefined);
+        setMoat(undefined);
+        setCompetitors([]);
+        setScores(undefined);
+        setValuationAnalysis(undefined);
         setCurrentNode("");
         setLogs([]);
       }
@@ -1091,6 +1135,15 @@ export default function Home() {
               risks={risks}
               news={news}
               financials={financials}
+              moat={moat}
+              competitors={competitors}
+              scores={scores}
+              valuationAnalysis={valuationAnalysis}
+              provider={provider}
+              apiKey={apiKey}
+              ticker={ticker}
+              companyName={companyInput}
+              profile={profile}
             />
           )}
 

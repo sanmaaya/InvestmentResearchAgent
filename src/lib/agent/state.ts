@@ -68,6 +68,45 @@ export interface Recommendation {
   executiveSummary: string;
 }
 
+export interface MoatMetrics {
+  brand: number; // 1-5
+  brandComment?: string;
+  technology: number;
+  technologyComment?: string;
+  networkEffect: number;
+  networkEffectComment?: string;
+  switchingCost: number;
+  switchingCostComment?: string;
+  patents: number;
+  patentsComment?: string;
+  economiesOfScale: number;
+  economiesOfScaleComment?: string;
+}
+
+export interface CompetitorComparison {
+  symbol: string;
+  name: string;
+  peRatio?: string;
+  margin?: string;
+  growth?: string;
+  marketCap?: string;
+}
+
+export interface InvestmentScores {
+  financialHealth: number;
+  growth: number;
+  management: number;
+  risk: number;
+  valuation: number;
+  innovation: number;
+  overall: number;
+}
+
+export interface ValuationAnalysis {
+  verdict: "Overvalued" | "Fairly Valued" | "Undervalued";
+  reason: string;
+}
+
 export const AgentState = Annotation.Root({
   companyName: Annotation<string>(),
   ticker: Annotation<string>(),
@@ -78,6 +117,10 @@ export const AgentState = Annotation.Root({
   analysis: Annotation<AnalysisSection>(),
   risks: Annotation<RiskSection>(),
   recommendation: Annotation<Recommendation>(),
+  moat: Annotation<MoatMetrics>(),
+  competitors: Annotation<CompetitorComparison[]>(),
+  scores: Annotation<InvestmentScores>(),
+  valuationAnalysis: Annotation<ValuationAnalysis>(),
   logs: Annotation<string[]>({
     reducer: (x, y) => x.concat(y),
     default: () => [],
