@@ -111,7 +111,7 @@ export default function FinancialDashboard({ profile, financials, chartData }: F
                 <XAxis dataKey="date" stroke="var(--text-muted)" fontSize={11} tickLine={false} />
                 <YAxis stroke="var(--text-muted)" fontSize={11} tickLine={false} domain={["auto", "auto"]} />
                 <Tooltip
-                  contentStyle={{ background: "#0f172a", borderColor: "var(--border-color)", borderRadius: "8px" }}
+                  contentStyle={{ background: "var(--bg-card)", borderColor: "var(--border-color)", borderRadius: "8px" }}
                   labelStyle={{ color: "var(--text-secondary)", fontSize: 11 }}
                   itemStyle={{ color: "var(--text-primary)", fontSize: 12, fontWeight: 700 }}
                 />

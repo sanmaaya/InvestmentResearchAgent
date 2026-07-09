@@ -11,7 +11,13 @@ import {
   ArrowRight,
   TrendingUp, 
   CheckCircle,
-  Briefcase
+  Briefcase,
+  Search,
+  ChevronDown,
+  ArrowLeft,
+  Globe,
+  Star,
+  FileText
 } from "lucide-react";
 import GraphVisualizer from "@/components/GraphVisualizer";
 import FinancialDashboard from "@/components/FinancialDashboard";
@@ -36,6 +42,13 @@ interface HistoryItem {
 
 export default function Home() {
   const [view, setView] = useState<"landing" | "console">("landing");
+
+  // Redesigned landing page helper states
+  const [activeTab, setActiveTab] = useState<"equities" | "crypto" | "swot">("equities");
+  const [filterAsset, setFilterAsset] = useState("Equities");
+  const [filterModel, setFilterModel] = useState("gemini");
+  const [filterSource, setFilterSource] = useState("tavily");
+  const [filterConviction, setFilterConviction] = useState("high");
 
   // Input states
   const [companyInput, setCompanyInput] = useState("");
@@ -118,9 +131,14 @@ export default function Home() {
   }, [logs]);
 
   // Handle launching the Research Agent
-  const triggerResearch = async (e: React.FormEvent) => {
-    e.preventDefault();
-    if (!companyInput.trim()) return;
+  const triggerResearch = async (e?: React.FormEvent, overrideCompany?: string) => {
+    if (e) e.preventDefault();
+    const targetCompany = overrideCompany || companyInput;
+    if (!targetCompany.trim()) return;
+
+    if (overrideCompany) {
+      setCompanyInput(overrideCompany);
+    }
 
     setLoading(true);
     setErrorMsg(null);
@@ -153,7 +171,7 @@ export default function Home() {
           "Content-Type": "application/json",
         },
         body: JSON.stringify({
-          companyName: companyInput,
+          companyName: targetCompany,
           provider,
           apiKey: apiKey.trim(),
           tavilyKey: tavilyKey.trim(),
@@ -323,96 +341,482 @@ export default function Home() {
   };
 
   if (view === "landing") {
+    const handleLandingSearch = (e: React.FormEvent) => {
+      e.preventDefault();
+      let target = companyInput.trim();
+      if (!target) {
+        // Defaults based on active tab
+        if (activeTab === "equities") target = "NVIDIA";
+        else if (activeTab === "crypto") target = "Tesla";
+        else target = "Apple";
+        setCompanyInput(target);
+      }
+      setView("console");
+      triggerResearch(undefined, target);
+    };
+
+    const handleFilterSearch = (e: React.FormEvent) => {
+      e.preventDefault();
+      let target = companyInput.trim();
+      if (!target) {
+        target = "Apple";
+        setCompanyInput("Apple");
+      }
+      setView("console");
+      triggerResearch(undefined, target);
+    };
+
     return (
-      <div className="app-container" style={{ paddingBottom: "0" }}>
-        {/* Simple Header */}
-        <header className="header" style={{ borderBottom: "none" }}>
-          <div className="header-title-group">
-            <h1 style={{ background: "linear-gradient(135deg, #fff 0%, var(--color-brand-light) 100%)", WebkitBackgroundClip: "text", WebkitTextFillColor: "transparent" }}>Sanmaaya AI Labs</h1>
-            <span className="header-subtitle">AI Investment Research Agent Node</span>
-          </div>
-          <button className="btn btn-secondary" onClick={() => setView("console")}>
-            Enter Console
-            <ArrowRight size={16} />
-          </button>
-        </header>
+      <div className="landing-theme">
+        <div className="l-container">
+          
+          {/* Header */}
+          <header className="l-header">
+            <a href="#" className="l-logo" onClick={(e) => e.preventDefault()}>
+              <div className="l-logo-icon">U</div>
+              UIXSHUVO
+            </a>
+            
+            <ul className="l-nav-links">
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Buy</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Rent</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Sell</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Find Agent</a></li>
+            </ul>
+            
+            <ul className="l-nav-actions">
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Add Property</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>About Us</a></li>
+              <li>
+                <button className="l-nav-btn l-join-btn" onClick={() => setView("console")}>
+                  Join
+                </button>
+              </li>
+            </ul>
+          </header>
 
-        {/* Hero */}
-        <div className="landing-hero-container">
-          <span className="landing-badge">V1.0 Autonomous Agentic Workflow</span>
-          <h2 className="landing-title">Empower Your Portfolio with Agentic Intelligence</h2>
-          <p className="landing-subtitle">
-            Sanmaaya AI Investment Research Agent leverages real-time financial statements, SWOT news sentiment analytics, and LangGraph DAG execution to deliver structured invest/pass decisions with deep reasoning in seconds.
-          </p>
-          <button className="btn landing-cta-btn" onClick={() => setView("console")}>
-            Launch Research Console
-            <ArrowRight size={18} />
-          </button>
+          {/* Hero Section */}
+          <section className="l-hero">
+            <div className="l-hero-left">
+              <h1 className="l-hero-heading">
+                Connecting you <br />
+                <span className="muted-text">to the </span> <span className="muted-text">home </span> <br />
+                you love
+              </h1>
+              
+              {/* Hero Tabs */}
+              <div className="l-hero-tabs">
+                <button 
+                  className={`l-hero-tab ${activeTab === "equities" ? "active" : ""}`}
+                  onClick={() => {
+                    setActiveTab("equities");
+                  }}
+                >
+                  Buy
+                </button>
+                <button 
+                  className={`l-hero-tab ${activeTab === "crypto" ? "active" : ""}`}
+                  onClick={() => {
+                    setActiveTab("crypto");
+                  }}
+                >
+                  Rent
+                </button>
+                <button 
+                  className={`l-hero-tab ${activeTab === "swot" ? "active" : ""}`}
+                  onClick={() => {
+                    setActiveTab("swot");
+                  }}
+                >
+                  Sell
+                </button>
+              </div>
 
-          {/* Visual Node Diagram */}
-          <div className="landing-visual-panel">
-            <div className="landing-visual-glow" />
-            <div className="landing-visual-inner">
-              <h3 style={{ fontSize: "1.05rem", color: "var(--text-secondary)", marginBottom: "20px", textTransform: "uppercase", letterSpacing: "0.05em", fontWeight: 700 }}>
-                LangGraph Diligence Pipeline
-              </h3>
-              <div style={{ display: "flex", justifyContent: "space-between", gap: "10px", flexWrap: "wrap", zIndex: 1, position: "relative" }}>
-                {[
-                  { title: "Resolve Ticker", desc: "Maps text query to symbol" },
-                  { title: "Fetch Financials", desc: "Quotes, balance sheet ratios" },
-                  { title: "Scrape News", desc: "Gathers articles & sentiments" },
-                  { title: "Analyze Fundamentals", desc: "PE, solvency, leverage" },
-                  { title: "Assess Risks", desc: "Competitive & macro SWOT" },
-                  { title: "Decide & Synthesize", desc: "Invest/pass conviction verdict" }
-                ].map((item, idx) => (
-                  <div key={idx} style={{ flex: "1 1 120px", display: "flex", flexDirection: "column", alignItems: "center", gap: "8px" }}>
-                    <div style={{ width: "36px", height: "36px", borderRadius: "50%", background: "rgba(99, 102, 241, 0.15)", border: "2px solid var(--color-brand)", display: "flex", alignItems: "center", justifyItems: "center", justifyContent: "center", fontWeight: "bold", color: "#fff", fontSize: "0.85rem" }}>
-                      {idx + 1}
-                    </div>
-                    <span style={{ fontSize: "0.8rem", fontWeight: 700, color: "var(--text-primary)" }}>{item.title}</span>
-                    <span style={{ fontSize: "0.65rem", color: "var(--text-secondary)", textAlign: "center" }}>{item.desc}</span>
+              {/* Hero Search Input Form */}
+              <form onSubmit={handleLandingSearch} className="l-hero-search">
+                <input 
+                  type="text" 
+                  placeholder="Address, School, City or Market"
+                  value={companyInput}
+                  onChange={(e) => setCompanyInput(e.target.value)}
+                />
+                <button type="submit" className="l-search-btn-circle" title="Search">
+                  <Search size={18} />
+                </button>
+              </form>
+
+              {/* Quote / Testimonial */}
+              <div className="l-hero-quote">
+                <p className="l-quote-text">
+                  "Turning your dreams into reality, one home at a time. Let us guide you to your perfect place."
+                </p>
+              </div>
+            </div>
+
+            {/* Hero Right Side - Beautiful Dashboard mockup */}
+            <div className="l-hero-right">
+              <div className="l-stock-display">
+                <div className="l-stock-glow" />
+                <div className="l-stock-header">
+                  <div className="l-stock-meta">
+                    <span className="l-stock-label">Interactive Diligence</span>
+                    <span className="l-stock-title">AI Pipeline Activity</span>
                   </div>
-                ))}
-              </div>
-            </div>
-          </div>
+                  <div className="l-stock-badge-live">
+                    <span className="l-stock-pulse" />
+                    LIVE TELEMETRY
+                  </div>
+                </div>
 
-          {/* Feature Grid */}
-          <div className="landing-features-grid">
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <Briefcase size={20} />
+                <div className="l-chart-area">
+                  <svg className="l-chart-svg" viewBox="0 0 400 180" fill="none" xmlns="http://www.w3.org/2000/svg">
+                    <defs>
+                      <linearGradient id="chartGradient" x1="0" y1="0" x2="0" y2="1">
+                        <stop offset="0%" stopColor="#f38c12" stopOpacity="0.25" />
+                        <stop offset="100%" stopColor="#f38c12" stopOpacity="0.0" />
+                      </linearGradient>
+                    </defs>
+                    
+                    {/* Grid Lines */}
+                    <line x1="0" y1="30" x2="400" y2="30" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+                    <line x1="0" y1="70" x2="400" y2="70" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+                    <line x1="0" y1="110" x2="400" y2="110" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+                    <line x1="0" y1="150" x2="400" y2="150" stroke="rgba(255,255,255,0.04)" strokeWidth="1" />
+                    
+                    {/* Area under curve */}
+                    <path d="M 0 140 Q 50 130 80 110 T 150 90 T 220 100 T 280 60 T 350 40 T 400 20 L 400 180 L 0 180 Z" fill="url(#chartGradient)" />
+                    
+                    {/* Curve */}
+                    <path d="M 0 140 Q 50 130 80 110 T 150 90 T 220 100 T 280 60 T 350 40 T 400 20" stroke="#f38c12" strokeWidth="3" strokeLinecap="round" />
+                    
+                    {/* Pulse Dot */}
+                    <circle cx="400" cy="20" r="6" fill="#f38c12" />
+                    <circle cx="400" cy="20" r="12" fill="none" stroke="#f38c12" strokeWidth="2" opacity="0.5">
+                      <animate attributeName="r" values="6;16;6" dur="2s" repeatCount="indefinite" />
+                      <animate attributeName="opacity" values="0.8;0;0.8" dur="2s" repeatCount="indefinite" />
+                    </circle>
+                  </svg>
+                </div>
+
+                {/* Floating Tags */}
+                <div className="l-floating-tag l-tag-1">
+                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', fontWeight: 'bold' }}>MODEL ACCURACY</span>
+                  <span style={{ fontSize: '1.05rem', fontWeight: '850', color: '#10b981' }}>98.4%</span>
+                </div>
+                
+                <div className="l-floating-tag l-tag-2">
+                  <span style={{ fontSize: '0.65rem', color: 'rgba(255,255,255,0.4)', fontWeight: 'bold' }}>SENTIMENT</span>
+                  <span style={{ fontSize: '1.05rem', fontWeight: '850', color: '#38bdf8' }}>+88% BULL</span>
+                </div>
               </div>
-              <h4 className="landing-feature-title">Autonomous Diligence DAG</h4>
-              <p className="landing-feature-desc">
-                Organized as isolated execution nodes with state channels. Handles web searches, document fetching, and financial analysis in structured stages.
+
+              {/* Overlapping Bismillah House Card (matches screenshot) */}
+              <div className="l-stock-card">
+                <span className="l-sc-title">Bismillah House</span>
+                <p className="l-sc-desc">Contemporary home featuring exceptional interior design.</p>
+                <div className="l-sc-footer">
+                  <span className="l-sc-price">USD 560,000</span>
+                  <div className="l-sc-actions">
+                    <button type="button" className="l-sc-arrow-prev" title="Back" onClick={() => setCompanyInput("Tesla")}>
+                      <ArrowLeft size={14} />
+                    </button>
+                    <button type="button" className="l-sc-arrow-next" title="Run NVIDIA research" onClick={() => {
+                      setCompanyInput("NVIDIA");
+                      setView("console");
+                      triggerResearch(undefined, "NVIDIA");
+                    }}>
+                      <ArrowRight size={14} />
+                    </button>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Trusted by Section */}
+          <section className="l-trusted">
+            <div className="l-trusted-left">
+              <div className="l-trusted-left-inner">
+                <h2 className="l-trusted-heading">
+                  Trusted by <br />
+                  <span className="muted-text">100 Million </span> <br />
+                  buyers
+                </h2>
+                <p className="l-trusted-sub">
+                  Only we connects you directly to the person that knows the most about a property for sale, the listing agent.
+                </p>
+
+                {/* Overlapping User Avatars */}
+                <div className="l-avatar-group">
+                  <img src="https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=100&h=100&fit=crop&crop=faces" alt="Analyst 1" className="l-avatar" />
+                  <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?w=100&h=100&fit=crop&crop=faces" alt="Analyst 2" className="l-avatar" />
+                  <img src="https://images.unsplash.com/photo-1494790108377-be9c29b29330?w=100&h=100&fit=crop&crop=faces" alt="Analyst 3" className="l-avatar" />
+                  <img src="https://images.unsplash.com/photo-1500648767791-00dcc994a43e?w=100&h=100&fit=crop&crop=faces" alt="Analyst 4" className="l-avatar" />
+                </div>
+
+                {/* Stats */}
+                <div className="l-stats-row">
+                  <div className="l-stat-item">
+                    <span className="l-stat-val">100M</span>
+                    <span className="l-stat-lbl">Happy buyers</span>
+                  </div>
+                  <div className="l-stat-item">
+                    <span className="l-stat-val">40M</span>
+                    <span className="l-stat-lbl">Client review</span>
+                  </div>
+                  <div className="l-stat-item">
+                    <span className="l-stat-val">4.6</span>
+                    <span className="l-stat-lbl">Positive Rating</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            {/* Right side: 3 cards matching screenshot */}
+            <div className="l-trusted-right">
+              <div className="l-feature-card" onClick={() => {
+                setCompanyInput("Apple");
+                setView("console");
+                triggerResearch(undefined, "Apple");
+              }} style={{ cursor: 'pointer' }}>
+                <div className="l-feat-icon-circle">
+                  <Globe size={20} />
+                </div>
+                <div className="l-feat-info">
+                  <span className="l-feat-title">Explore great neighborhoods</span>
+                  <p className="l-feat-desc">
+                    Explore video tours, in-depth research, and articles on 20.000 neighborhoods.
+                  </p>
+                </div>
+                <div className="l-feat-arrow">
+                  <ArrowRight size={16} />
+                </div>
+              </div>
+
+              <div className="l-feature-card" onClick={() => {
+                setCompanyInput("NVIDIA");
+                setView("console");
+                triggerResearch(undefined, "NVIDIA");
+              }} style={{ cursor: 'pointer' }}>
+                <div className="l-feat-icon-circle">
+                  <Star size={20} />
+                </div>
+                <div className="l-feat-info">
+                  <span className="l-feat-title">Find highly rated best property</span>
+                  <p className="l-feat-desc">
+                    Find the very best schools with in-depth reviews and ratings from multiple experts.
+                  </p>
+                </div>
+                <div className="l-feat-arrow">
+                  <ArrowRight size={16} />
+                </div>
+              </div>
+
+              <div className="l-feature-card" onClick={() => {
+                setCompanyInput("Tesla");
+                setView("console");
+                triggerResearch(undefined, "Tesla");
+              }} style={{ cursor: 'pointer' }}>
+                <div className="l-feat-icon-circle">
+                  <FileText size={20} />
+                </div>
+                <div className="l-feat-info">
+                  <span className="l-feat-title">Discover condo quality buildings</span>
+                  <p className="l-feat-desc">
+                    Explore video tours, in-depth research, and articles on 20.000 neighborhoods.
+                  </p>
+                </div>
+                <div className="l-feat-arrow">
+                  <ArrowRight size={16} />
+                </div>
+              </div>
+            </div>
+          </section>
+
+          {/* Top Investment Picks Section */}
+          <section className="l-picks-section" style={{ padding: "40px 0 60px 0", display: "flex", flexDirection: "column", gap: "28px" }}>
+            <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
+              <h2 style={{ fontSize: "2.4rem", fontWeight: 850 }}>
+                Top Investment <span className="muted-text">Picks</span>
+              </h2>
+              <p style={{ fontSize: "0.95rem", color: "var(--l-text-secondary)" }}>
+                Curated high-conviction assets actively rated and monitored by the AI research agent
               </p>
             </div>
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <TrendingUp size={20} />
-              </div>
-              <h4 className="landing-feature-title">Real Yahoo Finance Feeds</h4>
-              <p className="landing-feature-desc">
-                Pulls actual cash statements, operating margins, leverage percentages, and prices directly without requiring registration or paid API tokens.
-              </p>
+
+            <div className="l-picks-grid" style={{ display: "grid", gridTemplateColumns: "repeat(auto-fill, minmax(260px, 1fr))", gap: "24px" }}>
+              {[
+                { symbol: "NVDA", name: "NVIDIA Corp.", price: "$145.00", verdict: "Strong Buy", score: "92%", theme: "AI Hardware" },
+                { symbol: "MSFT", name: "Microsoft Corp.", price: "$425.00", verdict: "Buy", score: "88%", theme: "Enterprise Cloud" },
+                { symbol: "AAPL", name: "Apple Inc.", price: "$210.00", verdict: "Buy", score: "82%", theme: "Consumer Devices" },
+                { symbol: "AMZN", name: "Amazon.com Inc.", price: "$185.00", verdict: "Buy", score: "85%", theme: "Retail & AWS" },
+              ].map((pick) => (
+                <div 
+                  key={pick.symbol} 
+                  className="l-pick-card"
+                  onClick={() => {
+                    setCompanyInput(pick.symbol);
+                    setView("console");
+                    triggerResearch(undefined, pick.symbol);
+                  }}
+                  style={{
+                    background: "var(--l-card-white)",
+                    border: "1px solid var(--l-border)",
+                    borderRadius: "20px",
+                    padding: "24px",
+                    cursor: "pointer",
+                    transition: "all 0.3s cubic-bezier(0.16, 1, 0.3, 1)",
+                    display: "flex",
+                    flexDirection: "column",
+                    gap: "16px",
+                    boxShadow: "var(--l-shadow-soft)"
+                  }}
+                >
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ display: "flex", flexDirection: "column" }}>
+                      <span style={{ fontSize: "1.2rem", fontWeight: 800 }}>{pick.symbol}</span>
+                      <span style={{ fontSize: "0.8rem", color: "var(--l-text-muted)" }}>{pick.name}</span>
+                    </div>
+                    <span 
+                      style={{
+                        padding: "4px 10px",
+                        borderRadius: "8px",
+                        fontSize: "0.75rem",
+                        fontWeight: 800,
+                        textTransform: "uppercase",
+                        background: "rgba(16, 185, 129, 0.08)",
+                        color: "#10b981",
+                        border: "1px solid rgba(16, 185, 129, 0.15)"
+                      }}
+                    >
+                      {pick.verdict}
+                    </span>
+                  </div>
+
+                  <div style={{ height: "1px", background: "rgba(0, 0, 0, 0.05)" }} />
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "2px" }}>
+                      <span style={{ fontSize: "0.65rem", color: "var(--l-text-muted)", fontWeight: "bold", textTransform: "uppercase" }}>Current Price</span>
+                      <span style={{ fontSize: "1rem", fontWeight: 800 }}>{pick.price}</span>
+                    </div>
+                    <div style={{ display: "flex", flexDirection: "column", gap: "2px", alignItems: "flex-end" }}>
+                      <span style={{ fontSize: "0.65rem", color: "var(--l-text-muted)", fontWeight: "bold", textTransform: "uppercase" }}>Conviction</span>
+                      <span style={{ fontSize: "1rem", fontWeight: 800, color: "var(--l-accent-orange)" }}>{pick.score}</span>
+                    </div>
+                  </div>
+
+                  <div style={{ display: "flex", justifyContent: "space-between", alignItems: "center", marginTop: "4px" }}>
+                    <span style={{ fontSize: "0.75rem", color: "var(--l-text-secondary)", fontWeight: "500", background: "rgba(0, 0, 0, 0.03)", padding: "4px 8px", borderRadius: "6px" }}>
+                      {pick.theme}
+                    </span>
+                    <span className="l-pick-arrow" style={{ color: "var(--l-text-muted)", transition: "all 0.2s ease" }}>
+                      <ArrowRight size={16} />
+                    </span>
+                  </div>
+                </div>
+              ))}
             </div>
-            <div className="landing-feature-card">
-              <div className="landing-feature-icon">
-                <CheckCircle size={20} />
+          </section>
+
+          {/* Curved filter section at bottom */}
+          <section className="l-filter-section">
+            <h2 className="l-fs-heading">
+              Find your <span className="muted-text">dream home</span>
+            </h2>
+            <p className="l-fs-sub">
+              Connecting you with the perfect property for your loved ones
+            </p>
+
+            <form onSubmit={handleFilterSearch} className="l-filter-bar">
+              {/* Col 1 */}
+              <div className="l-filter-col">
+                <span className="l-filter-col-label">Property</span>
+                <div className="l-filter-select-wrapper">
+                  <select 
+                    className="l-filter-select"
+                    value={filterAsset}
+                    onChange={(e) => setFilterAsset(e.target.value)}
+                  >
+                    <option value="Equities">Stocks & Shares</option>
+                    <option value="Crypto">Crypto Assets</option>
+                    <option value="ETFs">ETFs & Funds</option>
+                  </select>
+                  <ChevronDown size={14} className="l-filter-chevron" />
+                </div>
               </div>
-              <h4 className="landing-feature-title">Dual Model Flexibility</h4>
-              <p className="landing-feature-desc">
-                Switch between Google Gemini and OpenAI models dynamically. Enter keys directly inside the client panel or fetch from workspace settings.
-              </p>
-            </div>
-          </div>
+
+              <div className="l-filter-divider" />
+
+              {/* Col 2 */}
+              <div className="l-filter-col">
+                <span className="l-filter-col-label">Location</span>
+                <div className="l-filter-select-wrapper">
+                  <select 
+                    className="l-filter-select"
+                    value={filterModel}
+                    onChange={(e) => {
+                      setFilterModel(e.target.value);
+                      setProvider(e.target.value as any);
+                    }}
+                  >
+                    <option value="gemini">Google Gemini</option>
+                    <option value="openai">OpenAI GPT</option>
+                  </select>
+                  <ChevronDown size={14} className="l-filter-chevron" />
+                </div>
+              </div>
+
+              <div className="l-filter-divider" />
+
+              {/* Col 3 */}
+              <div className="l-filter-col">
+                <span className="l-filter-col-label">Date</span>
+                <div className="l-filter-select-wrapper">
+                  <select 
+                    className="l-filter-select"
+                    value={filterSource}
+                    onChange={(e) => setFilterSource(e.target.value)}
+                  >
+                    <option value="tavily">Tavily Engine</option>
+                    <option value="duckduckgo">DuckDuckGo Scraper</option>
+                  </select>
+                  <ChevronDown size={14} className="l-filter-chevron" />
+                </div>
+              </div>
+
+              <div className="l-filter-divider" />
+
+              {/* Col 4 */}
+              <div className="l-filter-col">
+                <span className="l-filter-col-label">Price</span>
+                <div className="l-filter-select-wrapper">
+                  <select 
+                    className="l-filter-select"
+                    value={filterConviction}
+                    onChange={(e) => setFilterConviction(e.target.value)}
+                  >
+                    <option value="high">High Conviction</option>
+                    <option value="balanced">Balanced Risk</option>
+                    <option value="growth">Aggressive Growth</option>
+                  </select>
+                  <ChevronDown size={14} className="l-filter-chevron" />
+                </div>
+              </div>
+
+              {/* Action search button */}
+              <button type="submit" className="l-search-btn-pill">
+                <Search size={16} />
+                Search
+              </button>
+            </form>
+          </section>
+
+          <footer className="landing-footer-new">
+            <p>© 2026 UIXSHUVO AI Labs. All rights reserved. Developed for AI Product Design.</p>
+          </footer>
+
         </div>
-
-        {/* Footer */}
-        <footer className="landing-footer">
-          <p>© 2026 Sanmaaya. All rights reserved. Developed for AI Product Development Assignment.</p>
-        </footer>
       </div>
     );
   }
