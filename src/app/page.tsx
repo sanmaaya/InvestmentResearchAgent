@@ -378,15 +378,40 @@ export default function Home() {
             </a>
             
             <ul className="l-nav-links">
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Equities</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Crypto</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Reports</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Analysis Console</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => {
+                e.preventDefault();
+                setActiveTab("equities");
+                document.getElementById("picks-section")?.scrollIntoView({ behavior: "smooth" });
+              }}>Equities</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => {
+                e.preventDefault();
+                setActiveTab("crypto");
+                setFilterAsset("Crypto");
+                document.getElementById("filter-section")?.scrollIntoView({ behavior: "smooth" });
+              }}>Crypto</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => {
+                e.preventDefault();
+                setView("console");
+              }}>Reports</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => {
+                e.preventDefault();
+                setView("console");
+              }}>Analysis Console</a></li>
             </ul>
             
             <ul className="l-nav-actions">
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Analyze Ticker</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Platform Info</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => {
+                e.preventDefault();
+                const input = document.getElementById("hero-search-input");
+                if (input) {
+                  input.scrollIntoView({ behavior: "smooth", block: "center" });
+                  setTimeout(() => (input as HTMLInputElement).focus(), 500);
+                }
+              }}>Analyze Ticker</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => {
+                e.preventDefault();
+                document.getElementById("trusted-section")?.scrollIntoView({ behavior: "smooth" });
+              }}>Platform Info</a></li>
               <li>
                 <button className="l-nav-btn l-join-btn" onClick={() => setView("console")}>
                   Join
@@ -435,6 +460,7 @@ export default function Home() {
               {/* Hero Search Input Form */}
               <form onSubmit={handleLandingSearch} className="l-hero-search">
                 <input 
+                  id="hero-search-input"
                   type="text" 
                   placeholder="Enter Stock Ticker, Company Name, or Asset..."
                   value={companyInput}
@@ -534,7 +560,7 @@ export default function Home() {
           </section>
 
           {/* Trusted by Section */}
-          <section className="l-trusted">
+          <section id="trusted-section" className="l-trusted">
             <div className="l-trusted-left">
               <div className="l-trusted-left-inner">
                 <h2 className="l-trusted-heading">
@@ -634,7 +660,7 @@ export default function Home() {
           </section>
 
           {/* Top Investment Picks Section */}
-          <section className="l-picks-section" style={{ padding: "40px 0 60px 0", display: "flex", flexDirection: "column", gap: "28px" }}>
+          <section id="picks-section" className="l-picks-section" style={{ padding: "40px 0 60px 0", display: "flex", flexDirection: "column", gap: "28px" }}>
             <div style={{ display: "flex", flexDirection: "column", gap: "6px" }}>
               <h2 style={{ fontSize: "2.4rem", fontWeight: 850 }}>
                 Top Investment <span className="muted-text">Picks</span>
@@ -720,7 +746,7 @@ export default function Home() {
           </section>
 
           {/* Curved filter section at bottom */}
-          <section className="l-filter-section">
+          <section id="filter-section" className="l-filter-section">
             <h2 className="l-fs-heading">
               Find your next <span className="muted-text">opportunity</span>
             </h2>
