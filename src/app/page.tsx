@@ -378,15 +378,15 @@ export default function Home() {
             </a>
             
             <ul className="l-nav-links">
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Buy</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Rent</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Sell</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Find Agent</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Equities</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Crypto</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Reports</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Analysis Console</a></li>
             </ul>
             
             <ul className="l-nav-actions">
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Add Property</a></li>
-              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>About Us</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Analyze Ticker</a></li>
+              <li><a href="#" className="l-nav-link" onClick={(e) => e.preventDefault()}>Platform Info</a></li>
               <li>
                 <button className="l-nav-btn l-join-btn" onClick={() => setView("console")}>
                   Join
@@ -400,8 +400,8 @@ export default function Home() {
             <div className="l-hero-left">
               <h1 className="l-hero-heading">
                 Connecting you <br />
-                <span className="muted-text">to the </span> <span className="muted-text">home </span> <br />
-                you love
+                <span className="muted-text">to the </span> <span className="muted-text">investments </span> <br />
+                you trust
               </h1>
               
               {/* Hero Tabs */}
@@ -412,7 +412,7 @@ export default function Home() {
                     setActiveTab("equities");
                   }}
                 >
-                  Buy
+                  Equities
                 </button>
                 <button 
                   className={`l-hero-tab ${activeTab === "crypto" ? "active" : ""}`}
@@ -420,7 +420,7 @@ export default function Home() {
                     setActiveTab("crypto");
                   }}
                 >
-                  Rent
+                  Crypto
                 </button>
                 <button 
                   className={`l-hero-tab ${activeTab === "swot" ? "active" : ""}`}
@@ -428,7 +428,7 @@ export default function Home() {
                     setActiveTab("swot");
                   }}
                 >
-                  Sell
+                  SWOT
                 </button>
               </div>
 
@@ -436,7 +436,7 @@ export default function Home() {
               <form onSubmit={handleLandingSearch} className="l-hero-search">
                 <input 
                   type="text" 
-                  placeholder="Address, School, City or Market"
+                  placeholder="Enter Stock Ticker, Company Name, or Asset..."
                   value={companyInput}
                   onChange={(e) => setCompanyInput(e.target.value)}
                 />
@@ -448,7 +448,7 @@ export default function Home() {
               {/* Quote / Testimonial */}
               <div className="l-hero-quote">
                 <p className="l-quote-text">
-                  "Turning your dreams into reality, one home at a time. Let us guide you to your perfect place."
+                  "Democratizing institutional-grade research, one ticker at a time. Let our AI guide you to alpha."
                 </p>
               </div>
             </div>
@@ -510,12 +510,12 @@ export default function Home() {
                 </div>
               </div>
 
-              {/* Overlapping Bismillah House Card (matches screenshot) */}
+              {/* Overlapping NVIDIA Corp. Card (aligned with AI agent) */}
               <div className="l-stock-card">
-                <span className="l-sc-title">Bismillah House</span>
-                <p className="l-sc-desc">Contemporary home featuring exceptional interior design.</p>
+                <span className="l-sc-title">NVIDIA Corp. (NVDA)</span>
+                <p className="l-sc-desc">Undisputed market leader in AI hardware, data center GPUs, and CUDA frameworks.</p>
                 <div className="l-sc-footer">
-                  <span className="l-sc-price">USD 560,000</span>
+                  <span className="l-sc-price">USD 145.00 (+88% YoY)</span>
                   <div className="l-sc-actions">
                     <button type="button" className="l-sc-arrow-prev" title="Back" onClick={() => setCompanyInput("Tesla")}>
                       <ArrowLeft size={14} />
@@ -539,11 +539,11 @@ export default function Home() {
               <div className="l-trusted-left-inner">
                 <h2 className="l-trusted-heading">
                   Trusted by <br />
-                  <span className="muted-text">100 Million </span> <br />
-                  buyers
+                  <span className="muted-text">10,000+ Active </span> <br />
+                  investors
                 </h2>
                 <p className="l-trusted-sub">
-                  Only we connects you directly to the person that knows the most about a property for sale, the listing agent.
+                  Our research node integrates multi-agent AI execution pipelines with real-time news retrieval to analyze any market equity.
                 </p>
 
                 {/* Overlapping User Avatars */}
@@ -557,16 +557,16 @@ export default function Home() {
                 {/* Stats */}
                 <div className="l-stats-row">
                   <div className="l-stat-item">
-                    <span className="l-stat-val">100M</span>
-                    <span className="l-stat-lbl">Happy buyers</span>
+                    <span className="l-stat-val">100M+</span>
+                    <span className="l-stat-lbl">Queries Processed</span>
                   </div>
                   <div className="l-stat-item">
-                    <span className="l-stat-val">40M</span>
-                    <span className="l-stat-lbl">Client review</span>
+                    <span className="l-stat-val">40M+</span>
+                    <span className="l-stat-lbl">Consensus Points</span>
                   </div>
                   <div className="l-stat-item">
-                    <span className="l-stat-val">4.6</span>
-                    <span className="l-stat-lbl">Positive Rating</span>
+                    <span className="l-stat-val">98.4%</span>
+                    <span className="l-stat-lbl">Model Accuracy</span>
                   </div>
                 </div>
               </div>
@@ -583,9 +583,9 @@ export default function Home() {
                   <Globe size={20} />
                 </div>
                 <div className="l-feat-info">
-                  <span className="l-feat-title">Explore great neighborhoods</span>
+                  <span className="l-feat-title">Explore Market Verticals</span>
                   <p className="l-feat-desc">
-                    Explore video tours, in-depth research, and articles on 20.000 neighborhoods.
+                    Conduct detailed vertical market research and screen sector-wide financial metrics.
                   </p>
                 </div>
                 <div className="l-feat-arrow">
@@ -602,9 +602,9 @@ export default function Home() {
                   <Star size={20} />
                 </div>
                 <div className="l-feat-info">
-                  <span className="l-feat-title">Find highly rated best property</span>
+                  <span className="l-feat-title">High-Conviction Equity Picks</span>
                   <p className="l-feat-desc">
-                    Find the very best schools with in-depth reviews and ratings from multiple experts.
+                    Identify stock opportunities filtered through multi-agent valuation models.
                   </p>
                 </div>
                 <div className="l-feat-arrow">
@@ -621,9 +621,9 @@ export default function Home() {
                   <FileText size={20} />
                 </div>
                 <div className="l-feat-info">
-                  <span className="l-feat-title">Discover condo quality buildings</span>
+                  <span className="l-feat-title">Analyze Technical & Sentiment</span>
                   <p className="l-feat-desc">
-                    Explore video tours, in-depth research, and articles on 20.000 neighborhoods.
+                    Review real-time news feeds, macro events, and competitive SWOT assessments.
                   </p>
                 </div>
                 <div className="l-feat-arrow">
@@ -722,16 +722,16 @@ export default function Home() {
           {/* Curved filter section at bottom */}
           <section className="l-filter-section">
             <h2 className="l-fs-heading">
-              Find your <span className="muted-text">dream home</span>
+              Find your next <span className="muted-text">opportunity</span>
             </h2>
             <p className="l-fs-sub">
-              Connecting you with the perfect property for your loved ones
+              Filter the AI agent workspace parameters to initialize the search engine
             </p>
 
             <form onSubmit={handleFilterSearch} className="l-filter-bar">
               {/* Col 1 */}
               <div className="l-filter-col">
-                <span className="l-filter-col-label">Property</span>
+                <span className="l-filter-col-label">Asset Class</span>
                 <div className="l-filter-select-wrapper">
                   <select 
                     className="l-filter-select"
@@ -750,7 +750,7 @@ export default function Home() {
 
               {/* Col 2 */}
               <div className="l-filter-col">
-                <span className="l-filter-col-label">Location</span>
+                <span className="l-filter-col-label">LLM Provider</span>
                 <div className="l-filter-select-wrapper">
                   <select 
                     className="l-filter-select"
@@ -771,7 +771,7 @@ export default function Home() {
 
               {/* Col 3 */}
               <div className="l-filter-col">
-                <span className="l-filter-col-label">Date</span>
+                <span className="l-filter-col-label">Search Engine</span>
                 <div className="l-filter-select-wrapper">
                   <select 
                     className="l-filter-select"
@@ -789,7 +789,7 @@ export default function Home() {
 
               {/* Col 4 */}
               <div className="l-filter-col">
-                <span className="l-filter-col-label">Price</span>
+                <span className="l-filter-col-label">Risk Profile</span>
                 <div className="l-filter-select-wrapper">
                   <select 
                     className="l-filter-select"
