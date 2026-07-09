@@ -108,13 +108,14 @@ Respond with ONLY the JSON object.`;
     try {
       // Fetch quote summary
       const summary = await yahooFinance.quoteSummary(ticker, {
-        modules: ["financialData", "price", "defaultKeyStatistics", "summaryProfile"],
+        modules: ["financialData", "price", "defaultKeyStatistics", "summaryProfile", "summaryDetail"],
       });
 
       const fd: any = summary.financialData || {};
       const price: any = summary.price || {};
       const keyStats: any = summary.defaultKeyStatistics || {};
       const summaryProfile: any = summary.summaryProfile || {};
+      const sd: any = summary.summaryDetail || {};
 
       // Map profile
       profile = {
@@ -131,16 +132,16 @@ Respond with ONLY the JSON object.`;
       // Map metrics
       financials = {
         currentPrice: fd.currentPrice || price.regularMarketPrice,
-        marketCap: price.marketCap,
-        peRatio: keyStats.trailingPE || price.trailingPE,
-        forwardPe: keyStats.forwardPE,
+        marketCap: price.marketCap || sd.marketCap,
+        peRatio: keyStats.trailingPE || sd.trailingPE || price.trailingPE,
+        forwardPe: keyStats.forwardPE || sd.forwardPE,
         currentRatio: fd.currentRatio,
         quickRatio: fd.quickRatio,
         debtToEquity: fd.debtToEquity,
         returnOnEquity: fd.returnOnEquity,
         returnOnAssets: fd.returnOnAssets,
         revenueGrowth: fd.revenueGrowth,
-        profitMargin: fd.profitMargins || keyStats.profitMargins,
+        profitMargin: fd.profitMargins || keyStats.profitMargins || sd.profitMargins,
         operatingMargin: fd.operatingMargins,
         ebitdaMargin: fd.ebitdaMargins,
         freeCashFlow: fd.freeCashflow,
