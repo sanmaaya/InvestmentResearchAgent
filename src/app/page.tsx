@@ -373,8 +373,8 @@ export default function Home() {
           {/* Header */}
           <header className="l-header">
             <a href="#" className="l-logo" onClick={(e) => e.preventDefault()}>
-              <div className="l-logo-icon">U</div>
-              UIXSHUVO
+              <div className="l-logo-icon">S</div>
+              Sanmayas AI AGENT
             </a>
             
             <ul className="l-nav-links">
@@ -813,7 +813,7 @@ export default function Home() {
           </section>
 
           <footer className="landing-footer-new">
-            <p>© 2026 UIXSHUVO AI Labs. All rights reserved. Developed for AI Product Design.</p>
+            <p>© 2026 Sanmayas AI AGENT. All rights reserved. Developed for AI Product Design.</p>
           </footer>
 
         </div>
